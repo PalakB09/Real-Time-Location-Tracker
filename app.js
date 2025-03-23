@@ -8,7 +8,7 @@ const path = require('path');
 
 const port = 3000;
 
-// ✅ Serve static files (CSS, JS)
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
@@ -16,11 +16,11 @@ app.set('view engine', 'ejs');
 io.on('connection', (socket) => {
     console.log(`A user connected: ${socket.id}`);
 
-    // ✅ Handle location updates from client
+   
     socket.on("sendLocation", (data) => {
         console.log(`Received location from ${socket.id}:`, data);
 
-        // ✅ Broadcast location to all connected clients
+       
         io.emit("receive-location", { id: socket.id, ...data });
     });
 

@@ -5,9 +5,8 @@ if (navigator.geolocation) {
         (position) => {
             const { latitude, longitude } = position.coords;
 
-            console.log("Current Location:", latitude, longitude); // ✅ Debugging
-
-            // Send location to the backend
+            console.log("Current Location:", latitude, longitude);
+           
             socket.emit("sendLocation", { latitude, longitude });
         },
         (error) => {
@@ -25,7 +24,7 @@ if (navigator.geolocation) {
 
 
 
-const map = L.map("map").setView([0, 0], 27); // Default view
+const map = L.map("map").setView([0, 0], 27); 
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "Open Street Map",
@@ -33,27 +32,25 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 
 const markers = {};
 
-// ✅ Wait for geolocation to load, then set the map center
+
 socket.on("receive-location", (data) => {
     const { id, latitude, longitude } = data;
 
-    console.log(`Received location from ${id}:`, latitude, longitude); // ✅ Debugging
-
-    // ✅ Set map view to the latest received location
+    console.log(`Received location from ${id}:`, latitude, longitude);
     if (!markers[id]) {
         markers[id] = L.marker([latitude, longitude]).addTo(map);
     } else {
         markers[id].setLatLng([latitude, longitude]);
     }
 
-    // ✅ Set map view to the user's location (only if it's the first location update)
+   
     map.setView([latitude, longitude], 27);
 });
 
 socket.on("remove-marker", (data) => {
     const { id } = data;
 
-    console.log(`Removing marker for user ${id}`); // ✅ Debugging
+    console.log(`Removing marker for user ${id}`);
 
     if (markers[id]) {
         map.removeLayer(markers[id]);
